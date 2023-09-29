@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using System.Xml.Schema;
+using Microsoft.VisualBasic;
 
 namespace PrimeNumbersAgain
 {
@@ -16,17 +20,32 @@ namespace PrimeNumbersAgain
             timer.Start();
             prime = FindNthPrime(n);
             timer.Stop();
-            
-            
-            Console.WriteLine($"\nToo easy.. {prime} is the nth prime when n is {n}. I found that answer in {timer.Elapsed.Seconds} seconds.");
 
-            EvaluatePassingTime(timer.Elapsed.Seconds);
+            Console.WriteLine($"\nToo easy.. {prime} is the nth prime when n is {n}. I found that answer in {(double)(timer.Elapsed.Milliseconds)/1000} seconds.");
+
+            EvaluatePassingTime(timer.Elapsed.Milliseconds);
         }
-
         static int FindNthPrime(int n)
         {
-            return 0;
+            bool[] Sieve = new bool[50000000];
+            List<int> primes = new List<int>();
+            
+            for (int i = 2; i < Sieve.Length && primes.Count < n; i++)
+            {
+                if (!Sieve[i])
+                {
+                    primes.Add(i);
+                    for (int j = i * 2; j < Sieve.Length; j += i)
+                    {
+                        Sieve[j] = true;
+                    }
+                }
+            }
+            
+            return primes[primes.Count - 1];
+
         }
+
 
         static int GetNumber()
         {
